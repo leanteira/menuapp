@@ -1,0 +1,20 @@
+<?php
+include('include-header.php');
+?>
+<body>
+<div class="layout-wrapper layout-content-navbar"><div class="layout-container"><?php include('include-menu.php'); ?><div class="layout-page"><?php include('include-navbar.php'); ?><div class="content-wrapper"><div class="container-xxl flex-grow-1 container-p-y">
+<div class="d-flex justify-content-between align-items-center mb-3"><h4 class="mb-0">Productos</h4></div>
+<div class="card mb-3"><div class="card-body"><form id="formProducto" class="row g-2"><input type="hidden" id="prodId"><div class="col-md-4"><input class="form-control" id="prodNombre" placeholder="Nombre" required></div><div class="col-md-3"><select class="form-select" id="prodCategoria"></select></div><div class="col-md-2"><input class="form-control" id="prodPrecio" type="number" min="0" step="0.01" placeholder="Precio" required></div><div class="col-md-3"><input class="form-control" id="prodDesc" placeholder="Descripción"></div><div class="col-md-2"><select id="prodActivo" class="form-select"><option value="1">Activo</option><option value="0">Inactivo</option></select></div><div class="col-md-10 d-grid"><button class="btn btn-primary" type="submit">Guardar</button></div></form></div></div>
+<div class="card"><div class="card-body"><div class="table-responsive"><table class="table table-hover" id="tablaProductos"><thead><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Estado</th><th></th></tr></thead><tbody></tbody></table></div></div></div>
+</div><?php include('include-footer.php'); ?><div class="content-backdrop fade"></div></div></div></div></div>
+<?php include('include-js-import.php'); ?>
+<script>
+const userRole=<?php echo json_encode($rol ?? ''); ?>;
+function rest(){return userRole!=='superadmin'?0:Number(new URLSearchParams(location.search).get('restaurante_id')||0);} function q(){const r=rest();return r>0?('?restaurante_id='+r):'';}
+async function loadCategorias(){const r=await fetch('api/mr/admin/categorias.php'+q(),{credentials:'same-origin'});const d=await r.json();if(!d.ok){alert(d.error||'Error categorías');return;}prodCategoria.innerHTML='<option value="">Sin categoría</option>';d.categorias.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.nombre;prodCategoria.appendChild(o);});}
+async function loadProductos(){const r=await fetch('api/mr/admin/productos.php'+q(),{credentials:'same-origin'});const d=await r.json();if(!d.ok){alert(d.error||'Error productos');return;}const tb=document.querySelector('#tablaProductos tbody');tb.innerHTML='';d.productos.forEach(p=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${p.id}</td><td>${p.nombre}</td><td>${p.categoria_nombre||'-'}</td><td>$ ${Number(p.precio_base).toFixed(2)}</td><td>${p.activo?'Activo':'Inactivo'}</td><td class="d-flex gap-1"><button class="btn btn-sm btn-outline-primary" onclick='editProd(${JSON.stringify(p)})'>Editar</button><a class="btn btn-sm btn-outline-secondary" href="producto_detalle.php?producto_id=${p.id}">Opciones</a></td>`;tb.appendChild(tr);});}
+function editProd(p){prodId.value=p.id;prodNombre.value=p.nombre;prodCategoria.value=p.categoria_id||'';prodPrecio.value=p.precio_base;prodDesc.value=p.descripcion||'';prodActivo.value=p.activo?'1':'0';} window.editProd=editProd;
+formProducto.addEventListener('submit',async(e)=>{e.preventDefault();const id=Number(prodId.value||0);const p={action:id?'update':'create',id,nombre:prodNombre.value,categoria_id:Number(prodCategoria.value||0),precio_base:Number(prodPrecio.value||0),descripcion:prodDesc.value,activo:Number(prodActivo.value)===1};if(userRole==='superadmin')p.restaurante_id=rest();const r=await fetch('api/mr/admin/productos.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});const d=await r.json();if(!d.ok){alert(d.error||'Error');return;}e.target.reset();prodId.value='';loadProductos();});
+(async()=>{await loadCategorias();await loadProductos();})();
+</script>
+</body></html>

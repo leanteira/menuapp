@@ -1,0 +1,714 @@
+/* ============================================
+   ESTILOS PERSONALIZADOS PARA CLÍNICA
+   ============================================ */
+
+/* Variables de colores personalizados */
+:root {
+  --clinic-primary: #7367f0;
+  --clinic-success: #28c76f;
+  --clinic-warning: #ff9f43;
+  --clinic-danger: #ea5455;
+  --clinic-info: #00cfe8;
+  --clinic-gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --clinic-gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --clinic-gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --clinic-gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --clinic-turquoise-gradient: linear-gradient(180deg, #e64389 0%, #ff6fb1 55%, #a86a87 100%);
+  --clinic-soft-fuchsia-1: #f6d4e4;
+  --clinic-soft-fuchsia-2: #e896b8;
+  --clinic-soft-fuchsia-3: #d85c95;
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ============================================
+   CARDS CON HOVER EFFECT
+   ============================================ */
+
+.card-stats-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.card-stats-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px 0 rgba(67, 89, 113, 0.2);
+}
+
+.card-stats-hover .avatar-lg {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-stats-hover:hover .avatar-lg {
+  animation: pulse 1s infinite;
+}
+
+/* ============================================
+   HEADER GRADIENTE
+   ============================================ */
+
+.bg-gradient-primary {
+  background: var(--clinic-gradient-primary) !important;
+  border: none;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.bg-gradient-success {
+  background: var(--clinic-gradient-success) !important;
+}
+
+.bg-gradient-warning {
+  background: var(--clinic-gradient-warning) !important;
+}
+
+.bg-gradient-info {
+  background: var(--clinic-gradient-info) !important;
+}
+
+/* ============================================
+   TIMELINE PERSONALIZADA
+   ============================================ */
+
+.timeline {
+  position: relative;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 30px;
+  padding-bottom: 20px;
+}
+
+.timeline-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 20px;
+  height: 100%;
+  width: 2px;
+  background: #e7eaf3;
+}
+
+.timeline-point {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid;
+}
+
+.timeline-point-primary {
+  border-color: var(--clinic-primary);
+}
+
+.timeline-point-success {
+  border-color: var(--clinic-success);
+}
+
+.timeline-point-warning {
+  border-color: var(--clinic-warning);
+}
+
+.timeline-point-info {
+  border-color: var(--clinic-info);
+}
+
+.timeline-event {
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* ============================================
+   TABLAS MEJORADAS
+   ============================================ */
+
+.table-hover tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(115, 103, 240, 0.05);
+  transform: scale(1.01);
+  box-shadow: 0 2px 8px rgba(67, 89, 113, 0.1);
+}
+
+.table thead th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+  border-bottom: 2px solid #e7eaf3;
+}
+
+/* ============================================
+   BADGES MEJORADOS
+   ============================================ */
+
+.badge {
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 0.375rem;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}
+
+/* ============================================
+   PROGRESS BARS ANIMADOS
+   ============================================ */
+
+.progress {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #e7eaf3;
+}
+
+.progress-bar {
+  transition: width 1s ease-in-out;
+  animation: shimmer 2s infinite;
+  background-size: 1000px 100%;
+}
+
+/* ============================================
+   BOTONES PERSONALIZADOS
+   ============================================ */
+
+.btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--clinic-gradient-primary);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ============================================
+   CALENDARIO PERSONALIZADO
+   ============================================ */
+
+#calendar {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.fc .fc-button-primary {
+  background: var(--clinic-gradient-primary);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.fc .fc-button-primary:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.fc-event {
+  border: none;
+  border-radius: 0.375rem;
+  padding: 2px 5px;
+  transition: all 0.2s ease;
+}
+
+.fc-event:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.fc-day-today {
+  background: rgba(115, 103, 240, 0.05) !important;
+}
+
+/* ============================================
+   FORMULARIOS MEJORADOS
+   ============================================ */
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--clinic-primary);
+  box-shadow: 0 0 0 0.2rem rgba(115, 103, 240, 0.25);
+  transition: all 0.2s ease;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #5e5873;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   LOADING SPINNER PERSONALIZADO
+   ============================================ */
+
+.spinner-clinic {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(115, 103, 240, 0.2);
+  border-top-color: var(--clinic-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   ALERT PERSONALIZADO
+   ============================================ */
+
+.alert {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(67, 89, 113, 0.12);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.alert-success {
+  background: linear-gradient(90deg, rgba(40, 199, 111, 0.1) 0%, rgba(40, 199, 111, 0.05) 100%);
+  color: #28c76f;
+}
+
+.alert-danger {
+  background: linear-gradient(90deg, rgba(234, 84, 85, 0.1) 0%, rgba(234, 84, 85, 0.05) 100%);
+  color: #ea5455;
+}
+
+.alert-warning {
+  background: linear-gradient(90deg, rgba(255, 159, 67, 0.1) 0%, rgba(255, 159, 67, 0.05) 100%);
+  color: #ff9f43;
+}
+
+.alert-info {
+  background: linear-gradient(90deg, rgba(0, 207, 232, 0.1) 0%, rgba(0, 207, 232, 0.05) 100%);
+  color: #00cfe8;
+}
+
+/* ============================================
+   SIDEBAR MENU MEJORADO CON TURQUEZA
+   ============================================ */
+
+/* Estilo del sidebar (layout-menu) */
+#layout-menu {
+  background: var(--clinic-turquoise-gradient) !important;
+  transition: width 0.3s ease !important;
+  box-shadow: 2px 0 12px rgba(255, 1, 79, 0.16);
+  border-right: 1px solid #f4b7cf;
+}
+
+/* Logo y marca del sidebar */
+.layout-menu .app-brand {
+  padding: 1.25rem;
+  border-bottom: 1px solid #f4b7cf;
+  margin-bottom: 1rem;
+}
+
+.layout-menu .app-brand-link {
+  display: flex;
+  align-items: center;
+}
+
+.layout-menu .app-brand-logo img {
+  max-height: 50px;
+  filter: none;
+}
+
+.layout-menu .app-brand-text {
+  color: #000 !important;
+  font-weight: 700;
+}
+
+/* Estilos del toggle menu */
+.layout-menu-toggle {
+  color: #6b3b57 !important;
+  background: rgba(255, 255, 255, 0.38);
+  border-radius: 6px;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.layout-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.58);
+  transform: scale(1.08);
+}
+
+/* Elementos del menú interior */
+.layout-menu .menu-inner {
+  padding: 0.5rem 0;
+}
+
+.layout-menu .menu-item {
+  margin: 0.25rem 0.75rem;
+  border-radius: 8px;
+  transition: all 0.25s ease !important;
+}
+
+/* Enlaces del menú */
+.layout-menu .menu-link {
+  color: #4a2c3f !important;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.layout-menu .menu-link:hover {
+  background: rgba(255, 255, 255, 0.45);
+  color: #402538 !important;
+  transform: none;
+}
+
+.layout-menu .menu-link .menu-icon {
+  color: #8d4e70;
+  margin-right: 0.75rem;
+  transition: all 0.25s ease;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Elementos activos */
+.layout-menu .menu-item.active > .menu-link {
+  background: rgba(255, 255, 255, 0.65);
+  color: #552742 !important;
+  box-shadow: inset -3px 0 0 0 #d83a80;
+  font-weight: 600;
+}
+
+.layout-menu .menu-item.active > .menu-link .menu-icon {
+  color: #d83a80;
+  transform: scale(1.1);
+}
+
+/* Submenús */
+.layout-menu .menu-sub {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  margin: 0.25rem 0;
+  overflow: hidden;
+}
+
+.layout-menu .menu-sub .menu-item {
+  margin: 0;
+}
+
+.layout-menu .menu-sub .menu-link {
+  padding-left: 2.5rem;
+  font-size: 0.875rem;
+  color: #5c3550;
+}
+
+.layout-menu .menu-sub .menu-link:hover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* Sombra interior del menú */
+.layout-menu .menu-inner-shadow {
+  background: linear-gradient(180deg, rgba(24, 28, 50, 0.08) 0%, transparent 100%);
+  display: none;
+}
+
+/* Estados responsive */
+.layout-menu-collapsed:not(.layout-menu-hover) #layout-menu {
+  box-shadow: none;
+}
+
+@media (max-width: 1199px) {
+  .layout-menu-collapsed #layout-menu {
+    transform: translateX(-100%);
+  }
+  
+  .layout-menu-collapsed.layout-menu-hover #layout-menu {
+    transform: translateX(0);
+    position: absolute;
+    z-index: 1000;
+  }
+}
+
+/* Animaciones del sidebar */
+#layout-menu .menu-inner > .menu-item {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+#layout-menu .menu-inner > .menu-item:nth-child(1) { animation-delay: 0.05s; }
+#layout-menu .menu-inner > .menu-item:nth-child(2) { animation-delay: 0.1s; }
+#layout-menu .menu-inner > .menu-item:nth-child(3) { animation-delay: 0.15s; }
+#layout-menu .menu-inner > .menu-item:nth-child(4) { animation-delay: 0.2s; }
+#layout-menu .menu-inner > .menu-item:nth-child(5) { animation-delay: 0.25s; }
+#layout-menu .menu-inner > .menu-item:nth-child(6) { animation-delay: 0.3s; }
+#layout-menu .menu-inner > .menu-item:nth-child(7) { animation-delay: 0.35s; }
+#layout-menu .menu-inner > .menu-item:nth-child(8) { animation-delay: 0.4s; }
+#layout-menu .menu-inner > .menu-item:nth-child(9) { animation-delay: 0.45s; }
+#layout-menu .menu-inner > .menu-item:nth-child(10) { animation-delay: 0.5s; }
+
+/* Efecto de brillo al pasar el cursor */
+.layout-menu .menu-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 1, 79, 0.08), transparent);
+  transition: left 0.5s ease;
+}
+
+/* Encabezados globales (override de verdes heredados en listados/formularios) */
+.page-header,
+.form-header,
+.pacientes-header,
+.vacaciones-header,
+.prepagas-header,
+.clinicas-header,
+.usuarios-header,
+.especialidades-header,
+.medicos-header,
+.horarios-header,
+.horario-header,
+.turnos-header,
+.tratamiento-header,
+.ingresos-header {
+  background: linear-gradient(135deg, var(--clinic-soft-fuchsia-1) 0%, var(--clinic-soft-fuchsia-2) 100%) !important;
+  color: #4b2940 !important;
+  border: 1px solid #efbfd5 !important;
+  box-shadow: 0 4px 12px rgba(216, 92, 149, 0.18) !important;
+}
+
+.page-header h1,
+.form-header h1,
+.form-header h2,
+.pacientes-header h1,
+.vacaciones-header h1,
+.prepagas-header h1,
+.clinicas-header h1,
+.usuarios-header h1,
+.page-header .text-white,
+.form-header .text-white,
+.pacientes-header .text-white,
+.vacaciones-header .text-white,
+.prepagas-header .text-white,
+.clinicas-header .text-white,
+.usuarios-header .text-white {
+  color: #4b2940 !important;
+}
+
+.especialidades-header h1,
+.medicos-header h1,
+.horarios-header h1,
+.horario-header h1,
+.turnos-header h1,
+.tratamiento-header h1,
+.ingresos-header h1,
+.especialidades-header h2,
+.medicos-header h2,
+.horarios-header h2,
+.horario-header h2,
+.turnos-header h2,
+.tratamiento-header h2,
+.ingresos-header h2,
+.especialidades-header .text-white,
+.medicos-header .text-white,
+.horarios-header .text-white,
+.horario-header .text-white,
+.turnos-header .text-white,
+.tratamiento-header .text-white,
+.ingresos-header .text-white {
+  color: #4b2940 !important;
+}
+
+/* Controles/filtros con foco fucsia suave */
+body .filter-group input:focus,
+body .filter-group select:focus,
+body .select2-container--default.select2-container--focus .select2-selection--single {
+  border-color: var(--clinic-soft-fuchsia-3) !important;
+  box-shadow: 0 0 0 0.2rem rgba(216, 92, 149, 0.2) !important;
+}
+
+/* Dropdown select2 y opciones destacadas */
+body .select2-results__option--highlighted[aria-selected] {
+  background-color: var(--clinic-soft-fuchsia-3) !important;
+}
+
+/* Cabeceras de tablas de listados (override global de #40A8B3) */
+body .table:not(.table-dark):not(.table-light) thead:not(.table-dark):not(.table-light) tr th,
+body .turnos-table thead th,
+body .medicos-table thead th,
+body .clinicas-table thead th,
+body .pacientes-table thead th,
+body .prepagas-table thead th,
+body .especialidades-table thead th,
+body .vacaciones-table thead th,
+body .horarios-table thead th,
+body .tratamientos-table thead th,
+body .usuarios-table thead th {
+  background: linear-gradient(135deg, var(--clinic-soft-fuchsia-2) 0%, var(--clinic-soft-fuchsia-3) 100%) !important;
+  color: #fff !important;
+}
+
+.layout-menu .menu-link:hover::before {
+  left: 100%;
+}
+
+/* Mejora de transiciones suaves */
+.layout-menu .menu-link,
+.layout-menu .menu-item {
+  position: relative;
+}
+
+/* ============================================
+   RESPONSIVE ANIMATIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .card-stats-hover {
+    animation-delay: 0.1s;
+  }
+  
+  .card-stats-hover:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .card-stats-hover:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  
+  .card-stats-hover:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.shadow-soft {
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12) !important;
+}
+
+.shadow-hover:hover {
+  box-shadow: 0 8px 24px 0 rgba(67, 89, 113, 0.2) !important;
+}
+
+.rounded-lg {
+  border-radius: 0.75rem !important;
+}
+
+.transition-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   DASHBOARD SPECIFIC STYLES
+   ============================================ */
+
+.stats-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stats-card:hover::before {
+  opacity: 1;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .card-stats-hover {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .btn, .badge {
+    box-shadow: none;
+  }
+}

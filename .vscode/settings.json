@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^\\$files = @\\(\n  'public_html/mirestoapp/app/mr_config\\.php',\n  'public_html/mirestoapp/app/mr_bootstrap\\.php',\n  'public_html/mirestoapp/app/mr_auth\\.php',\n  'public_html/mirestoapp/app/api/mr/menu\\.php',\n  'public_html/mirestoapp/app/api/mr/checkout\\.php',\n  'public_html/mirestoapp/app/api/mr/admin/pedidos\\.php',\n  'public_html/mirestoapp/app/api/mr/admin/pedido_estado\\.php',\n  'public_html/mirestoapp/app/login_mr\\.php',\n  'public_html/mirestoapp/app/logout_mr\\.php',\n  'public_html/mirestoapp/app/pedidos_mr\\.php',\n  'public_html/mirestoapp/index_mr\\.php'\n\\);\nforeach \\(\\$file in \\$files\\) \\{ php -l \\$file \\}$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

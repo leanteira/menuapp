@@ -1,0 +1,130 @@
+{
+  "panel": [
+    {
+      "name": "Panel Principal",
+      "icon": "ri-bar-chart-line",
+      "url": "index.php"
+    },
+    {
+      "name": "Leaflet Maps",
+      "icon": "ri-map-2-line",
+      "url": "maps-leaflet.html"
+    }
+  ],
+  "Reglamentos": [
+    {
+      "name": "Reglamento Zona honor 2024",
+      "subtitle": "LAAMBA",
+      "src": "img/icons/misc/search-xls.png",
+      "meta": "17kb",
+      "url": "reglamentos/Futsal%20-%20LigaValidación%20de%20Fichajes%20(1)_1735222910.pdf"
+    },
+    {
+      "name": "Passport Image",
+      "subtitle": "By William Budd",
+      "src": "img/icons/misc/search-jpg.png",
+      "meta": "35kb",
+      "url": "app-file-manager.html"
+    },
+    {
+      "name": "Class Notes",
+      "subtitle": "By Laurel Lance",
+      "src": "img/icons/misc/search-doc.png",
+      "meta": "153kb",
+      "url": "app-file-manager.html"
+    },
+    {
+      "name": "Receipt",
+      "subtitle": "By Donnie Darko",
+      "src": "img/icons/misc/search-jpg.png",
+      "meta": "25kb",
+      "url": "app-file-manager.html"
+    },
+    {
+      "name": "Social Guide",
+      "subtitle": "By Ryan Middleton",
+      "src": "img/icons/misc/search-doc.png",
+      "meta": "39kb",
+      "url": "app-file-manager.html"
+    },
+    {
+      "name": "Expenses",
+      "subtitle": "By Slade Wilson",
+      "src": "img/icons/misc/search-xls.png",
+      "meta": "15kb",
+      "url": "app-file-manager.html"
+    },
+    {
+      "name": "Documentation",
+      "subtitle": "By Walter White",
+      "src": "img/icons/misc/search-doc.png",
+      "meta": "200kb",
+      "url": "app-file-manager.html"
+    },
+    {
+      "name": "Avatar",
+      "subtitle": "By Ross Geller",
+      "src": "img/icons/misc/search-jpg.png",
+      "meta": "100kb",
+      "url": "app-file-manager.html"
+    },
+    {
+      "name": "Data",
+      "subtitle": "By Erik Foreman",
+      "src": "img/icons/misc/search-xls.png",
+      "meta": "5kb",
+      "url": "app-file-manager.html"
+    },
+    {
+      "name": "Gardening Guide",
+      "subtitle": "By Jerry Seinfeld",
+      "src": "img/icons/misc/search-doc.png",
+      "meta": "25kb",
+      "url": "app-file-manager.html"
+    }
+  ],
+  "members": [
+    {
+      "name": "John Doe",
+      "subtitle": "Admin",
+      "src": "img/avatars/1.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Micheal Clarke",
+      "subtitle": "Customer",
+      "src": "img/avatars/2.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Melina Gibson",
+      "subtitle": "Staff",
+      "src": "img/avatars/5.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Anna Strong",
+      "subtitle": "Staff",
+      "src": "img/avatars/7.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Stephanie Gould",
+      "subtitle": "Customer",
+      "src": "img/avatars/3.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "David Budd",
+      "subtitle": "Admin",
+      "src": "img/avatars/10.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Mark Shepiro",
+      "subtitle": "Admin",
+      "src": "img/avatars/12.png",
+      "url": "app-user-view-account.html"
+    }
+  ]
+}
