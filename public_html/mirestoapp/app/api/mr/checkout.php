@@ -13,13 +13,13 @@ $tipo = in_array($tipo, ['delivery', 'retiro', 'telefono'], true) ? $tipo : 'del
 
 $clienteData = isset($payload['cliente']) && is_array($payload['cliente']) ? $payload['cliente'] : [];
 $direccionData = isset($payload['direccion']) && is_array($payload['direccion']) ? $payload['direccion'] : [];
+$direccionId = isset($payload['direccion_id']) ? (int) $payload['direccion_id'] : 0;
+$latEntrega = isset($direccionData['lat']) && $direccionData['lat'] !== '' ? (float) $direccionData['lat'] : null;
+$lngEntrega = isset($direccionData['lng']) && $direccionData['lng'] !== '' ? (float) $direccionData['lng'] : null;
 $items = isset($payload['items']) && is_array($payload['items']) ? $payload['items'] : [];
 $zonaId = isset($payload['zona_id']) ? (int) $payload['zona_id'] : 0;
 $metodoPago = isset($payload['metodo_pago']) ? trim((string) $payload['metodo_pago']) : 'contra_entrega';
 $observaciones = isset($payload['observaciones']) ? trim((string) $payload['observaciones']) : null;
-
-$latEntrega = isset($direccionData['lat']) && $direccionData['lat'] !== '' ? (float) $direccionData['lat'] : null;
-$lngEntrega = isset($direccionData['lng']) && $direccionData['lng'] !== '' ? (float) $direccionData['lng'] : null;
 
 if (empty($items)) {
     mr_json_response(['ok' => false, 'error' => 'El pedido no tiene items.'], 400);
@@ -31,65 +31,104 @@ if (!$restaurante || (int) $restaurante['activo'] !== 1) {
 }
 $restauranteId = (int) $restaurante['id'];
 
-$nombreCliente = isset($clienteData['nombre']) ? trim((string) $clienteData['nombre']) : '';
-$telefonoCliente = isset($clienteData['telefono']) ? trim((string) $clienteData['telefono']) : '';
-$emailCliente = isset($clienteData['email']) ? trim((string) $clienteData['email']) : '';
+// Verificar si es usuario autenticado o invitado
+$isLoggedIn = isset($_SESSION['cliente_id']);
+$clienteId = null;
 
-if ($nombreCliente === '' || $telefonoCliente === '') {
-    mr_json_response(['ok' => false, 'error' => 'Datos de cliente incompletos (nombre y teléfono).'], 400);
+if ($isLoggedIn) {
+    // Usuario autenticado
+    $clienteId = (int) $_SESSION['cliente_id'];
+} else {
+    // Usuario invitado - requiere nombre y teléfono
+    $nombreCliente = isset($clienteData['nombre']) ? trim((string) $clienteData['nombre']) : '';
+    $telefonoCliente = isset($clienteData['telefono']) ? trim((string) $clienteData['telefono']) : '';
+    $emailCliente = isset($clienteData['email']) ? trim((string) $clienteData['email']) : '';
+
+    if ($nombreCliente === '' || $telefonoCliente === '') {
+        mr_json_response(['ok' => false, 'error' => 'Datos de cliente incompletos (nombre y teléfono).'], 400);
+    }
 }
 
-if ($tipo === 'delivery' && empty($direccionData['direccion'])) {
-    mr_json_response(['ok' => false, 'error' => 'Para delivery debes indicar dirección.'], 400);
+// Validar dirección para delivery
+if ($tipo === 'delivery') {
+    if ($isLoggedIn && $direccionId <= 0) {
+        mr_json_response(['ok' => false, 'error' => 'Dirección no seleccionada o inválida.'], 400);
+    } elseif (!$isLoggedIn && empty($direccionData['direccion'])) {
+        mr_json_response(['ok' => false, 'error' => 'Para delivery debes indicar dirección.'], 400);
+    }
 }
 
 $conn = mr_db();
 mysqli_begin_transaction($conn);
 
 try {
-    $clienteId = null;
+    // Si no está logueado, crear o actualizar cliente
+    if (!$isLoggedIn) {
+        $sqlCliente = 'SELECT id FROM clientes WHERE restaurante_id = ? AND telefono = ? LIMIT 1';
+        $stmtCliente = mysqli_prepare($conn, $sqlCliente);
+        mysqli_stmt_bind_param($stmtCliente, 'is', $restauranteId, $telefonoCliente);
+        mysqli_stmt_execute($stmtCliente);
+        $resCliente = mysqli_stmt_get_result($stmtCliente);
 
-    $sqlCliente = 'SELECT id FROM clientes WHERE restaurante_id = ? AND telefono = ? LIMIT 1';
-    $stmtCliente = mysqli_prepare($conn, $sqlCliente);
-    mysqli_stmt_bind_param($stmtCliente, 'is', $restauranteId, $telefonoCliente);
-    mysqli_stmt_execute($stmtCliente);
-    $resCliente = mysqli_stmt_get_result($stmtCliente);
+        if ($rowCliente = mysqli_fetch_assoc($resCliente)) {
+            $clienteId = (int) $rowCliente['id'];
+            mysqli_stmt_close($stmtCliente);
 
-    if ($rowCliente = mysqli_fetch_assoc($resCliente)) {
-        $clienteId = (int) $rowCliente['id'];
-        mysqli_stmt_close($stmtCliente);
+            $sqlUpdCliente = 'UPDATE clientes SET nombre = ?, email = ? WHERE id = ?';
+            $stmtUpdCliente = mysqli_prepare($conn, $sqlUpdCliente);
+            mysqli_stmt_bind_param($stmtUpdCliente, 'ssi', $nombreCliente, $emailCliente, $clienteId);
+            mysqli_stmt_execute($stmtUpdCliente);
+            mysqli_stmt_close($stmtUpdCliente);
+        } else {
+            mysqli_stmt_close($stmtCliente);
 
-        $sqlUpdCliente = 'UPDATE clientes SET nombre = ?, email = ? WHERE id = ?';
-        $stmtUpdCliente = mysqli_prepare($conn, $sqlUpdCliente);
-        mysqli_stmt_bind_param($stmtUpdCliente, 'ssi', $nombreCliente, $emailCliente, $clienteId);
-        mysqli_stmt_execute($stmtUpdCliente);
-        mysqli_stmt_close($stmtUpdCliente);
-    } else {
-        mysqli_stmt_close($stmtCliente);
-
-        $sqlInsCliente = 'INSERT INTO clientes (restaurante_id, nombre, telefono, email, created_at) VALUES (?, ?, ?, ?, ?)';
-        $stmtInsCliente = mysqli_prepare($conn, $sqlInsCliente);
-        $now = mr_now();
-        mysqli_stmt_bind_param($stmtInsCliente, 'issss', $restauranteId, $nombreCliente, $telefonoCliente, $emailCliente, $now);
-        mysqli_stmt_execute($stmtInsCliente);
-        $clienteId = (int) mysqli_insert_id($conn);
-        mysqli_stmt_close($stmtInsCliente);
+            $sqlInsCliente = 'INSERT INTO clientes (restaurante_id, nombre, telefono, email, created_at) VALUES (?, ?, ?, ?, ?)';
+            $stmtInsCliente = mysqli_prepare($conn, $sqlInsCliente);
+            $now = mr_now();
+            mysqli_stmt_bind_param($stmtInsCliente, 'issss', $restauranteId, $nombreCliente, $telefonoCliente, $emailCliente, $now);
+            mysqli_stmt_execute($stmtInsCliente);
+            $clienteId = (int) mysqli_insert_id($conn);
+            mysqli_stmt_close($stmtInsCliente);
+        }
     }
 
-    $direccionId = null;
-    if (!empty($direccionData['direccion'])) {
-        $direccion = trim((string) $direccionData['direccion']);
-        $lat = isset($direccionData['lat']) ? (float) $direccionData['lat'] : null;
-        $lng = isset($direccionData['lng']) ? (float) $direccionData['lng'] : null;
-        $referencia = isset($direccionData['referencia']) ? trim((string) $direccionData['referencia']) : null;
+    // Manejo de dirección
+    $direccionIdFinal = null;
+    if ($tipo === 'delivery') {
+        if ($isLoggedIn && $direccionId > 0) {
+            // Usar dirección guardada
+            $direccionIdFinal = $direccionId;
 
-        $sqlDir = 'INSERT INTO clientes_direcciones (cliente_id, direccion, lat, lng, referencia, created_at) VALUES (?, ?, ?, ?, ?, ?)';
-        $stmtDir = mysqli_prepare($conn, $sqlDir);
-        $now = mr_now();
-        mysqli_stmt_bind_param($stmtDir, 'isddss', $clienteId, $direccion, $lat, $lng, $referencia, $now);
-        mysqli_stmt_execute($stmtDir);
-        $direccionId = (int) mysqli_insert_id($conn);
-        mysqli_stmt_close($stmtDir);
+            // Intentar recuperar coordenadas de la dirección seleccionada
+            $sqlDirCoords = 'SELECT lat, lng FROM clientes_direcciones WHERE id = ? AND cliente_id = ? LIMIT 1';
+            $stmtDirCoords = mysqli_prepare($conn, $sqlDirCoords);
+            mysqli_stmt_bind_param($stmtDirCoords, 'ii', $direccionId, $clienteId);
+            mysqli_stmt_execute($stmtDirCoords);
+            $resDirCoords = mysqli_stmt_get_result($stmtDirCoords);
+            $dirCoords = mysqli_fetch_assoc($resDirCoords);
+            mysqli_stmt_close($stmtDirCoords);
+
+            if ($dirCoords) {
+                if ($latEntrega === null && $dirCoords['lat'] !== null) {
+                    $latEntrega = (float) $dirCoords['lat'];
+                }
+                if ($lngEntrega === null && $dirCoords['lng'] !== null) {
+                    $lngEntrega = (float) $dirCoords['lng'];
+                }
+            }
+        } elseif (!empty($direccionData['direccion'])) {
+            // Crear nueva dirección para invitado
+            $direccion = trim((string) $direccionData['direccion']);
+            $referencia = isset($direccionData['referencia']) ? trim((string) $direccionData['referencia']) : null;
+
+            $sqlDir = 'INSERT INTO clientes_direcciones (cliente_id, direccion, referencia, created_at) VALUES (?, ?, ?, ?)';
+            $stmtDir = mysqli_prepare($conn, $sqlDir);
+            $now = mr_now();
+            mysqli_stmt_bind_param($stmtDir, 'isss', $clienteId, $direccion, $referencia, $now);
+            mysqli_stmt_execute($stmtDir);
+            $direccionIdFinal = (int) mysqli_insert_id($conn);
+            mysqli_stmt_close($stmtDir);
+        }
     }
 
     $zona = null;
@@ -185,6 +224,15 @@ try {
 
     if ($tipo === 'delivery') {
         $zona = mr_resolve_delivery_zone($restauranteId, $zonaId, $latEntrega, $lngEntrega);
+
+        // Fallback: si no hay coordenadas o no matchea, usar la primera zona activa disponible
+        if (!$zona) {
+            $zonasActivas = mr_get_active_zonas($restauranteId);
+            if (!empty($zonasActivas)) {
+                $zona = $zonasActivas[0];
+            }
+        }
+
         if (!$zona) {
             throw new Exception('No se pudo determinar una zona de envío válida para la dirección indicada.');
         }
@@ -204,7 +252,7 @@ try {
     $stmtPedido = mysqli_prepare($conn, $sqlPedido);
     $estadoInicial = 'nuevo';
     $createdAt = mr_now();
-    $direccionIdParam = $direccionId ?: null;
+    $direccionIdParam = $direccionIdFinal ?: null;
     $zonaIdParam = $zonaId > 0 ? $zonaId : null;
 
     mysqli_stmt_bind_param(
@@ -279,11 +327,65 @@ try {
 
     mysqli_commit($conn);
 
+    $emailSent = false;
+    $clienteEmailFinal = '';
+    $clienteNombreFinal = '';
+
+    if ($isLoggedIn) {
+        $clienteNombreFinal = trim((string) ($_SESSION['cliente_nombre'] ?? ''));
+        $clienteEmailFinal = trim((string) ($_SESSION['cliente_email'] ?? ''));
+
+        if ($clienteEmailFinal === '') {
+            $sqlCli = 'SELECT nombre, email FROM clientes WHERE id = ? LIMIT 1';
+            $stmtCli = mysqli_prepare($conn, $sqlCli);
+            mysqli_stmt_bind_param($stmtCli, 'i', $clienteId);
+            mysqli_stmt_execute($stmtCli);
+            $resCli = mysqli_stmt_get_result($stmtCli);
+            $cli = mysqli_fetch_assoc($resCli);
+            mysqli_stmt_close($stmtCli);
+
+            if ($cli) {
+                $clienteNombreFinal = $clienteNombreFinal !== '' ? $clienteNombreFinal : trim((string) ($cli['nombre'] ?? ''));
+                $clienteEmailFinal = trim((string) ($cli['email'] ?? ''));
+            }
+        }
+    } else {
+        $clienteNombreFinal = $nombreCliente;
+        $clienteEmailFinal = $emailCliente;
+    }
+
+    if ($clienteEmailFinal !== '') {
+        $mailResult = mr_send_order_confirmation_email([
+            'to_email' => $clienteEmailFinal,
+            'pedido_id' => $pedidoId,
+            'cliente_nombre' => $clienteNombreFinal !== '' ? $clienteNombreFinal : 'Cliente',
+            'restaurante_nombre' => (string) ($restaurante['nombre'] ?? 'MiRestoApp'),
+            'tipo' => $tipo,
+            'metodo_pago' => $metodoPago,
+            'totales' => [
+                'subtotal' => round($subtotal, 2),
+                'costo_envio' => round($costoEnvio, 2),
+                'total' => round($total, 2),
+            ],
+            'items' => $itemsFinal,
+        ]);
+
+        $emailSent = !empty($mailResult['sent']);
+    }
+
+    $slugFinal = trim((string) ($restaurante['slug'] ?? $slug));
+    $redirectUrl = '/mirestoapp/pedido-finalizado.php?pedido_id=' . urlencode((string) $pedidoId);
+    if ($slugFinal !== '') {
+        $redirectUrl .= '&slug=' . urlencode($slugFinal);
+    }
+
     mr_json_response([
         'ok' => true,
         'pedido_id' => $pedidoId,
         'estado' => $estadoInicial,
         'estado_pago' => $estadoPago,
+        'email_sent' => $emailSent,
+        'redirect_url' => $redirectUrl,
         'totales' => [
             'subtotal' => round($subtotal, 2),
             'costo_envio' => round($costoEnvio, 2),

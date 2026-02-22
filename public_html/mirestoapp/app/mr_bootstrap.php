@@ -292,6 +292,109 @@ function mr_http_json_request($method, $url, $headers = [], $payload = null)
     ];
 }
 
+function mr_send_order_confirmation_email(array $data)
+{
+    $config = require __DIR__ . '/mr_config.php';
+    $mailCfg = $config['email'] ?? [];
+
+    $enabled = !empty($mailCfg['enabled']);
+    $toEmail = trim((string) ($data['to_email'] ?? ''));
+    if (!$enabled || $toEmail === '') {
+        return ['sent' => false, 'reason' => 'disabled-or-missing-recipient'];
+    }
+
+    if (!is_file(__DIR__ . '/vendor/autoload.php')) {
+        return ['sent' => false, 'reason' => 'autoload-not-found'];
+    }
+
+    require_once __DIR__ . '/vendor/autoload.php';
+
+    $pedidoId = (int) ($data['pedido_id'] ?? 0);
+    $clienteNombre = trim((string) ($data['cliente_nombre'] ?? 'Cliente'));
+    $restoNombre = trim((string) ($data['restaurante_nombre'] ?? 'MiRestoApp'));
+    $tipo = trim((string) ($data['tipo'] ?? 'delivery'));
+    $metodo = trim((string) ($data['metodo_pago'] ?? 'contra_entrega'));
+    $totales = $data['totales'] ?? [];
+    $items = is_array($data['items'] ?? null) ? $data['items'] : [];
+
+    $fmtMoney = static function ($value) {
+        return '$' . number_format((float) $value, 2, ',', '.');
+    };
+
+    $itemsHtml = '';
+    foreach ($items as $item) {
+        $nombre = htmlspecialchars((string) ($item['nombre_producto'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $cantidad = (int) ($item['cantidad'] ?? 0);
+        $total = $fmtMoney((float) ($item['total'] ?? 0));
+
+        $detalles = '';
+        if (!empty($item['detalles']) && is_array($item['detalles'])) {
+            $parts = [];
+            foreach ($item['detalles'] as $d) {
+                $parts[] = htmlspecialchars((string) ($d['nombre'] ?? ''), ENT_QUOTES, 'UTF-8');
+            }
+            if (!empty($parts)) {
+                $detalles = '<div style="font-size:12px;color:#6f6788;">' . implode(', ', $parts) . '</div>';
+            }
+        }
+
+        $itemsHtml .= '<tr>'
+            . '<td style="padding:8px 0;border-bottom:1px solid #eee;">' . $nombre . ' x' . $cantidad . $detalles . '</td>'
+            . '<td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;font-weight:700;">' . $total . '</td>'
+            . '</tr>';
+    }
+
+    $tipoLabel = $tipo === 'retiro' ? 'Retiro en local' : 'Delivery';
+    $metodoLabel = $metodo === 'mercadopago' ? 'Mercado Pago' : 'Pago contra entrega';
+    $subject = 'Pedido confirmado #' . $pedidoId . ' · ' . $restoNombre;
+    $html = '<div style="font-family:Arial,sans-serif;color:#241b3e;max-width:640px;margin:0 auto;">'
+        . '<h2 style="color:#ea1d6f;margin-bottom:8px;">¡Pedido confirmado!</h2>'
+        . '<p style="margin-top:0;">Hola ' . htmlspecialchars($clienteNombre, ENT_QUOTES, 'UTF-8') . ', recibimos tu pedido en <strong>' . htmlspecialchars($restoNombre, ENT_QUOTES, 'UTF-8') . '</strong>.</p>'
+        . '<p><strong>Número de pedido:</strong> #' . $pedidoId . '<br>'
+        . '<strong>Tipo:</strong> ' . $tipoLabel . '<br>'
+        . '<strong>Pago:</strong> ' . $metodoLabel . '</p>'
+        . '<table style="width:100%;border-collapse:collapse;margin:12px 0;">'
+        . $itemsHtml
+        . '</table>'
+        . '<div style="background:#f9f8fd;border:1px solid #e7e4f2;border-radius:8px;padding:12px;">'
+        . '<div style="display:flex;justify-content:space-between;"><span>Subtotal</span><strong>' . $fmtMoney((float) ($totales['subtotal'] ?? 0)) . '</strong></div>'
+        . '<div style="display:flex;justify-content:space-between;"><span>Envío</span><strong>' . $fmtMoney((float) ($totales['costo_envio'] ?? 0)) . '</strong></div>'
+        . '<div style="display:flex;justify-content:space-between;border-top:1px solid #ddd;margin-top:8px;padding-top:8px;"><span style="font-weight:700;">Total</span><strong style="color:#ea1d6f;">' . $fmtMoney((float) ($totales['total'] ?? 0)) . '</strong></div>'
+        . '</div>'
+        . '<p style="color:#6f6788;font-size:13px;margin-top:14px;">Gracias por tu compra.</p>'
+        . '</div>';
+
+    try {
+        $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+        $mail->CharSet = 'UTF-8';
+        $mail->isSMTP();
+        $mail->Host = (string) ($mailCfg['host'] ?? '');
+        $mail->Port = (int) ($mailCfg['port'] ?? 587);
+        $mail->SMTPAuth = true;
+        $mail->Username = (string) ($mailCfg['username'] ?? '');
+        $mail->Password = (string) ($mailCfg['password'] ?? '');
+
+        $enc = strtolower((string) ($mailCfg['encryption'] ?? 'tls'));
+        if ($enc === 'ssl') {
+            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+        } else {
+            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+        }
+
+        $mail->setFrom((string) ($mailCfg['from_email'] ?? 'no-reply@mirestoapp.local'), (string) ($mailCfg['from_name'] ?? 'MiRestoApp'));
+        $mail->addAddress($toEmail, $clienteNombre);
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body = $html;
+        $mail->AltBody = 'Pedido confirmado #' . $pedidoId . '. Total: ' . $fmtMoney((float) ($totales['total'] ?? 0));
+        $mail->send();
+
+        return ['sent' => true];
+    } catch (Throwable $e) {
+        return ['sent' => false, 'reason' => $e->getMessage()];
+    }
+}
+
 function mr_mp_status_to_internal($mpStatus)
 {
     $status = strtolower((string) $mpStatus);
