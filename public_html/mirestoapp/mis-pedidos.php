@@ -22,20 +22,20 @@ if (!$isAuthenticated) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --brand: #ea1d6f;
-            --brand-dark: #ca165e;
-            --brand-soft: #ffe2ef;
-            --bg: #f3f2f8;
-            --ink: #241b3e;
-            --muted: #6f6788;
-            --line: #e7e4f2;
+            --brand: #2f8a3b;
+            --brand-dark: #246d2f;
+            --brand-soft: #e9f6e8;
+            --bg: #f3f7ee;
+            --ink: #1f2a1f;
+            --muted: #5f6f61;
+            --line: #dce8d9;
             --card: #fff;
-            --good: #00a650;
-            --sun: #ffde59;
+            --good: #2f8a3b;
+            --sun: #dceea5;
         }
 
         body {
-            background: radial-gradient(circle at top right, #ffe5f2 0, transparent 35%), var(--bg);
+            background: radial-gradient(circle at top right, #e8f5e4 0, transparent 36%), var(--bg);
             color: var(--ink);
             font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         }
@@ -48,7 +48,7 @@ if (!$isAuthenticated) {
             background: #fff;
             border: 1px solid var(--line);
             border-radius: 14px;
-            box-shadow: 0 8px 24px rgba(35, 18, 63, .06);
+            box-shadow: 0 8px 24px rgba(39, 79, 39, .08);
             padding: .7rem .9rem;
         }
 
@@ -67,7 +67,7 @@ if (!$isAuthenticated) {
             width: 34px;
             height: 34px;
             border-radius: 10px;
-            background: linear-gradient(135deg, var(--brand), #ff539c);
+            background: linear-gradient(135deg, var(--brand), #4dae5c);
             color: #fff;
             display: grid;
             place-items: center;
@@ -85,7 +85,7 @@ if (!$isAuthenticated) {
             border: 1px solid var(--line);
             background: #fff;
             border-radius: 999px;
-            color: #433a61;
+            color: #355239;
             padding: .45rem .75rem;
             font-size: .86rem;
             font-weight: 600;
@@ -121,7 +121,7 @@ if (!$isAuthenticated) {
         }
 
         .order-card:hover {
-            box-shadow: 0 4px 12px rgba(35, 18, 63, .1);
+            box-shadow: 0 4px 12px rgba(39, 79, 39, .12);
         }
 
         .order-header {
@@ -171,8 +171,8 @@ if (!$isAuthenticated) {
         }
 
         .order-status.preparando {
-            background: #e7d4f5;
-            color: #5a378f;
+            background: #e1f0dc;
+            color: #2d6a31;
         }
 
         .order-status.listo {

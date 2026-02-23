@@ -8,12 +8,18 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 <body>
 	<style>
 		.content-wrapper {
-			background: linear-gradient(180deg, #edf2ff 0%, #f4f7ff 55%, #eef3ff 100%);
+			background: linear-gradient(180deg, #f5f8f1 0%, #f8fbf4 55%, #f2f7ec 100%);
 		}
 
 		.card {
-			border: 1px solid #dbe4ff;
-			box-shadow: 0 10px 24px rgba(44, 72, 146, 0.08);
+			border: 1px solid #d9e6d2;
+			box-shadow: 0 10px 24px rgba(41, 87, 34, 0.08);
+		}
+
+		.content-wrapper h4,
+		.content-wrapper h5,
+		.content-wrapper h6 {
+			color: #255b2a;
 		}
 
 		#panelClienteCompacto .badge {
@@ -22,8 +28,8 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 
 		#tablaItems thead th,
 		#tablaPedidosHoy thead th {
-			background: #eef3ff;
-			color: #4d5b80;
+			background: #ecf5e8;
+			color: #315a31;
 			font-weight: 700;
 		}
 
@@ -42,9 +48,9 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 		.estado-confirmado,
 		.estado-preparando,
 		.estado-listo {
-			background: #eef3ff;
-			color: #3f5591;
-			border-color: #d8e3ff;
+			background: #edf7ea;
+			color: #3f6d2f;
+			border-color: #d5eaca;
 		}
 
 		.estado-enviado {
@@ -90,10 +96,10 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 		}
 
 		.categoria-chip {
-			border: 1px solid #d6def7;
+			border: 1px solid #cfe2c7;
 			border-radius: 999px;
-			background: #f5f8ff;
-			color: #355090;
+			background: #f3f9ef;
+			color: #3e6942;
 			font-size: 0.84rem;
 			padding: 6px 10px;
 			cursor: pointer;
@@ -101,9 +107,9 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 		}
 
 		.categoria-chip.active {
-			background: #5f6bff;
+			background: #3f8b3a;
 			color: #fff;
-			border-color: #5f6bff;
+			border-color: #3f8b3a;
 		}
 
 		#listaCoincidenciasCliente .list-group-item {
@@ -111,7 +117,7 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 		}
 
 		.opcion-item {
-			border: 1px solid #dfe5f5;
+			border: 1px solid #dce9d4;
 			border-radius: 10px;
 			padding: 10px;
 			margin-bottom: 8px;
@@ -132,15 +138,90 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 			align-items: center;
 			gap: 10px;
 			padding: 8px 10px;
-			border: 1px solid #e1e7f7;
+			border: 1px solid #d7e6cf;
 			border-radius: 10px;
 			margin-bottom: 8px;
-			background: #f9fbff;
+			background: #f7fcf3;
 		}
 
 		.gusto-empanada-qty {
 			width: 70px;
 			text-align: center;
+		}
+
+		.content-wrapper .btn {
+			border-radius: 10px;
+			font-size: 0.9rem;
+			font-weight: 600;
+			padding: 0.45rem 0.9rem;
+			line-height: 1.2;
+		}
+
+		#btnBuscarCliente,
+		#btnAbrirModalProductos,
+		#btnCrearPedido {
+			min-height: 40px;
+		}
+
+		#btnBuscarCliente,
+		#btnAbrirModalProductos {
+			border: 0;
+			background-image: linear-gradient(135deg, #3b9a48 0%, #2f8a3b 55%, #267734 100%);
+			box-shadow: 0 8px 18px rgba(38, 119, 52, 0.24);
+		}
+
+		#btnBuscarCliente:hover,
+		#btnAbrirModalProductos:hover {
+			filter: brightness(1.03);
+		}
+
+		#btnCrearPedido {
+			border: 0;
+			background-image: linear-gradient(135deg, #39b900 0%, #2fa800 60%, #279200 100%);
+			box-shadow: 0 8px 18px rgba(47, 168, 0, 0.2);
+			padding-inline: 1.3rem;
+		}
+
+		#btnCrearPedido:disabled {
+			background-image: none;
+			background-color: #dbe6d5;
+			color: #677463;
+			box-shadow: none;
+			opacity: 1;
+		}
+
+		.content-wrapper .btn-primary {
+			border: 0;
+			background-image: linear-gradient(135deg, #3b9a48 0%, #2f8a3b 55%, #267734 100%);
+			box-shadow: 0 8px 18px rgba(38, 119, 52, 0.18);
+		}
+
+		.content-wrapper .btn-primary:hover,
+		.content-wrapper .btn-primary:focus {
+			filter: brightness(1.03);
+		}
+
+		.content-wrapper .btn-outline-primary {
+			color: #2f7f36;
+			border-color: #8fc68a;
+		}
+
+		.content-wrapper .btn-outline-primary:hover,
+		.content-wrapper .btn-outline-primary:focus {
+			background: #ecf7e8;
+			color: #286f2f;
+			border-color: #79b773;
+		}
+
+		.content-wrapper .bg-primary {
+			background-color: #3b9a48 !important;
+		}
+
+		.content-wrapper .form-control:focus,
+		.content-wrapper .form-select:focus,
+		.content-wrapper textarea:focus {
+			border-color: #8fc68a;
+			box-shadow: 0 0 0 0.18rem rgba(59, 154, 72, 0.18);
 		}
 	</style>
 
@@ -236,8 +317,8 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 											<strong id="totalPedido">$ 0.00</strong>
 										</div>
 
-										<div class="mt-3 d-grid">
-											<button id="btnCrearPedido" class="btn btn-success">Crear pedido</button>
+										<div class="mt-3 d-flex justify-content-end">
+											<button id="btnCrearPedido" class="btn btn-success" disabled>Crear pedido</button>
 										</div>
 										<div id="msgEstado" class="mt-2 small"></div>
 									</div>
@@ -472,6 +553,25 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 			} else {
 				wrap.classList.add('d-none');
 			}
+			actualizarEstadoCrearPedido();
+		}
+
+		function clienteIngresado() {
+			const wrap = document.getElementById('clienteDataWrap');
+			if (!wrap || wrap.classList.contains('d-none')) {
+				return false;
+			}
+
+			const nombre = document.getElementById('clienteNombre')?.value.trim() || '';
+			const telefono = document.getElementById('clienteTelefono')?.value.trim() || '';
+			return nombre.length > 0 && telefono.length > 0;
+		}
+
+		function actualizarEstadoCrearPedido() {
+			const btnCrear = document.getElementById('btnCrearPedido');
+			if (!btnCrear) return;
+
+			btnCrear.disabled = !(clienteIngresado() && items.length > 0);
 		}
 
 		function setBadgeCliente(text, type) {
@@ -918,6 +1018,7 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 			});
 
 			document.getElementById('totalPedido').textContent = money(total);
+			actualizarEstadoCrearPedido();
 		}
 
 		window.removeItem = (index) => {
@@ -1305,6 +1406,10 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 			}
 		});
 
+		['clienteNombre', 'clienteTelefono'].forEach(id => {
+			document.getElementById(id).addEventListener('input', actualizarEstadoCrearPedido);
+		});
+
 		document.getElementById('filtroProductoRapido').addEventListener('input', renderProductosModal);
 		document.getElementById('filtroProductoRapido').addEventListener('keydown', (event) => {
 			if (event.key !== 'Enter') return;
@@ -1422,6 +1527,7 @@ $defaultRestauranteId = mr_resolve_restaurante_id($mrUser, 0);
 		cargarProductos();
 		cargarZonas();
 		cargarPedidosHoy();
+		actualizarEstadoCrearPedido();
 	</script>
 
 </body>

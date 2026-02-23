@@ -22,6 +22,13 @@ if ($resComboCol) {
     mysqli_free_result($resComboCol);
 }
 
+$hasImagenColumn = false;
+$resImagenCol = mysqli_query($conn, "SHOW COLUMNS FROM productos LIKE 'imagen'");
+if ($resImagenCol) {
+    $hasImagenColumn = mysqli_num_rows($resImagenCol) > 0;
+    mysqli_free_result($resImagenCol);
+}
+
 if ($method === 'GET') {
     $restauranteId = mr_resolve_restaurante_id($user, (int) mr_request_param('restaurante_id', 0));
 
@@ -31,8 +38,9 @@ if ($method === 'GET') {
 
     $codigoSelect = $hasCodigoColumn ? 'p.codigo' : 'NULL';
     $comboSelect = $hasComboGustosColumn ? 'p.es_combo_gustos' : '0';
+    $imagenSelect = $hasImagenColumn ? 'p.imagen' : 'NULL';
 
-    $sql = 'SELECT p.id, ' . $codigoSelect . ' AS codigo, ' . $comboSelect . ' AS es_combo_gustos, p.categoria_id, p.nombre, p.descripcion, p.precio_base, p.activo, c.nombre AS categoria_nombre
+    $sql = 'SELECT p.id, ' . $codigoSelect . ' AS codigo, ' . $comboSelect . ' AS es_combo_gustos, ' . $imagenSelect . ' AS imagen, p.categoria_id, p.nombre, p.descripcion, p.precio_base, p.activo, c.nombre AS categoria_nombre
             FROM productos p
             LEFT JOIN categorias c ON c.id = p.categoria_id
             WHERE p.restaurante_id = ?
@@ -49,6 +57,7 @@ if ($method === 'GET') {
             'id' => (int) $row['id'],
             'codigo' => $row['codigo'],
             'es_combo_gustos' => (int) $row['es_combo_gustos'] === 1,
+            'imagen' => $row['imagen'],
             'categoria_id' => (int) $row['categoria_id'],
             'categoria_nombre' => $row['categoria_nombre'],
             'nombre' => $row['nombre'],
@@ -70,6 +79,7 @@ if ($method === 'POST') {
         $codigo = strtoupper(trim((string) ($payload['codigo'] ?? '')));
         $nombre = trim((string) ($payload['nombre'] ?? ''));
         $descripcion = trim((string) ($payload['descripcion'] ?? ''));
+        $imagen = isset($payload['imagen']) ? trim((string) $payload['imagen']) : '';
         $precioBase = (float) ($payload['precio_base'] ?? 0);
         $categoriaId = (int) ($payload['categoria_id'] ?? 0);
         $activo = isset($payload['activo']) ? (int) ((bool) $payload['activo']) : 1;
@@ -153,6 +163,13 @@ if ($method === 'POST') {
             mysqli_stmt_close($stmt);
         }
 
+        if ($hasImagenColumn && $imagen !== '') {
+            $stmtImg = mysqli_prepare($conn, 'UPDATE productos SET imagen = ? WHERE id = ?');
+            mysqli_stmt_bind_param($stmtImg, 'si', $imagen, $id);
+            mysqli_stmt_execute($stmtImg);
+            mysqli_stmt_close($stmtImg);
+        }
+
         mr_json_response(['ok' => true, 'id' => $id], 201);
     }
 
@@ -161,6 +178,7 @@ if ($method === 'POST') {
         $codigo = strtoupper(trim((string) ($payload['codigo'] ?? '')));
         $nombre = trim((string) ($payload['nombre'] ?? ''));
         $descripcion = trim((string) ($payload['descripcion'] ?? ''));
+        $imagen = isset($payload['imagen']) ? trim((string) $payload['imagen']) : '';
         $precioBase = (float) ($payload['precio_base'] ?? 0);
         $categoriaId = (int) ($payload['categoria_id'] ?? 0);
         $activo = isset($payload['activo']) ? (int) ((bool) $payload['activo']) : 1;
@@ -228,6 +246,19 @@ if ($method === 'POST') {
 
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+
+        if ($hasImagenColumn && array_key_exists('imagen', $payload)) {
+            if ($user['rol'] === 'superadmin') {
+                $stmtImg = mysqli_prepare($conn, 'UPDATE productos SET imagen = ? WHERE id = ?');
+                mysqli_stmt_bind_param($stmtImg, 'si', $imagen, $id);
+            } else {
+                $restauranteId = (int) $user['restaurante_id'];
+                $stmtImg = mysqli_prepare($conn, 'UPDATE productos SET imagen = ? WHERE id = ? AND restaurante_id = ?');
+                mysqli_stmt_bind_param($stmtImg, 'sii', $imagen, $id, $restauranteId);
+            }
+            mysqli_stmt_execute($stmtImg);
+            mysqli_stmt_close($stmtImg);
+        }
 
         mr_json_response(['ok' => true]);
     }

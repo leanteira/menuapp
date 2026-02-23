@@ -12,44 +12,18 @@ include('include-header.php');
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h4 class="mb-0">Productos</h4>
+                            <button type="button" class="btn btn-primary" id="btnNuevoProducto">Nuevo producto</button>
                         </div>
 
                         <div class="card mb-3">
                             <div class="card-body">
-                                <form id="formProducto" class="row g-2">
-                                    <input type="hidden" id="prodId">
-
-                                    <div class="col-md-2">
-                                        <input class="form-control" id="prodCodigo" placeholder="Código (ej: P0001)">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <div>
+                                        <h6 class="mb-1">ABM de productos</h6>
+                                        <div class="small text-muted">Alta y edición desde modal, con imagen y preview.</div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <input class="form-control" id="prodNombre" placeholder="Nombre" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <select class="form-select" id="prodCategoria"></select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input class="form-control" id="prodPrecio" type="number" min="0" step="0.01" placeholder="Precio" required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input class="form-control" id="prodDesc" placeholder="Descripción">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <select id="prodActivo" class="form-select">
-                                            <option value="1">Activo</option>
-                                            <option value="0">Inactivo</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" id="prodComboGustos">
-                                            <label class="form-check-label" for="prodComboGustos">Combo gustos (docena)</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-10 d-grid">
-                                        <button class="btn btn-primary" type="submit">Guardar</button>
-                                    </div>
-                                </form>
+                                    <button type="button" class="btn btn-outline-primary" id="btnNuevoProductoCard">Crear producto</button>
+                                </div>
                             </div>
                         </div>
 
@@ -85,6 +59,7 @@ include('include-header.php');
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Código</th>
+                                                <th>Imagen</th>
                                                 <th>Nombre</th>
                                                 <th>Categoría</th>
                                                 <th>Precio</th>
@@ -103,6 +78,78 @@ include('include-header.php');
 
                     <?php include('include-footer.php'); ?>
                     <div class="content-backdrop fade"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloModalProducto">Nuevo producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formProducto" class="row g-3">
+                        <input type="hidden" id="prodId">
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="prodCodigo">Código</label>
+                            <input class="form-control" id="prodCodigo" placeholder="Ej: P0001">
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label" for="prodNombre">Nombre</label>
+                            <input class="form-control" id="prodNombre" placeholder="Nombre" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="prodCategoria">Categoría</label>
+                            <select class="form-select" id="prodCategoria"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="prodPrecio">Precio</label>
+                            <input class="form-control" id="prodPrecio" type="number" min="0" step="0.01" placeholder="Precio" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="prodActivo">Estado</label>
+                            <select id="prodActivo" class="form-select">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="prodDesc">Descripción</label>
+                            <input class="form-control" id="prodDesc" placeholder="Descripción">
+                        </div>
+
+                        <div class="col-md-8">
+                            <label class="form-label" for="prodImagenUrl">Imagen (URL o ruta)</label>
+                            <input class="form-control" id="prodImagenUrl" placeholder="assets/images/productos/mi-producto.jpg">
+                            <div class="form-text">Podés pegar URL/ruta o subir archivo debajo.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="prodImagenFile">Subir imagen</label>
+                            <input class="form-control" id="prodImagenFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="border rounded p-2 text-center h-100 d-flex flex-column justify-content-between">
+                                <div class="small text-muted mb-2">Preview</div>
+                                <img id="prodImagenPreview" alt="preview" style="max-width: 100%; max-height: 120px; object-fit: contain; display:none;">
+                                <div id="prodImagenSinPreview" class="small text-muted">Sin imagen</div>
+                            </div>
+                        </div>
+                        <div class="col-md-9 d-flex align-items-end">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="prodComboGustos">
+                                <label class="form-check-label" for="prodComboGustos">Combo gustos (docena)</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" type="submit" form="formProducto">Guardar producto</button>
                 </div>
             </div>
         </div>
@@ -233,6 +280,7 @@ include('include-header.php');
         const userRole = <?php echo json_encode($rol ?? ''); ?>;
         let productosData = [];
         let productoOpcionesActivo = null;
+        const modalProducto = new bootstrap.Modal(document.getElementById('modalProducto'));
         const modalOpcionesProducto = new bootstrap.Modal(document.getElementById('modalOpcionesProducto'));
         const modalVariante = new bootstrap.Modal(document.getElementById('modalVariante'));
         const modalModificador = new bootstrap.Modal(document.getElementById('modalModificador'));
@@ -278,6 +326,84 @@ include('include-header.php');
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
+        }
+
+        function escapeHtml(text) {
+            return String(text || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function resolveImageUrl(url) {
+            const raw = String(url || '').trim();
+            if (!raw) return '';
+            if (/^(https?:)?\/\//i.test(raw) || raw.startsWith('data:') || raw.startsWith('blob:')) {
+                return raw;
+            }
+            if (raw.startsWith('/')) {
+                return raw;
+            }
+            if (raw.startsWith('assets/')) {
+                return '../' + raw;
+            }
+            return raw;
+        }
+
+        function renderImagenPreview(url) {
+            const preview = document.getElementById('prodImagenPreview');
+            const empty = document.getElementById('prodImagenSinPreview');
+            const value = resolveImageUrl(url);
+
+            if (!value) {
+                preview.removeAttribute('src');
+                preview.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+
+            preview.src = value;
+            preview.style.display = 'block';
+            empty.style.display = 'none';
+        }
+
+        function resetProductoForm() {
+            formProducto.reset();
+            prodId.value = '';
+            prodActivo.value = '1';
+            prodComboGustos.checked = false;
+            prodImagenFile.value = '';
+            document.getElementById('tituloModalProducto').textContent = 'Nuevo producto';
+            renderImagenPreview('');
+        }
+
+        function openNuevoProductoModal() {
+            resetProductoForm();
+            modalProducto.show();
+        }
+
+        async function uploadImagenProducto(productoId) {
+            const input = document.getElementById('prodImagenFile');
+            if (!input?.files?.length) {
+                return null;
+            }
+
+            const fd = new FormData();
+            fd.append('producto_id', String(productoId));
+            fd.append('imagen', input.files[0]);
+
+            const response = await fetch('api/mr/admin/producto_imagen_upload.php', {
+                method: 'POST',
+                credentials: 'same-origin',
+                body: fd
+            });
+            const data = await response.json();
+            if (!data.ok) {
+                throw new Error(data.error || 'No se pudo subir la imagen.');
+            }
+            return data.imagen || null;
         }
 
         async function loadCategorias() {
@@ -349,16 +475,19 @@ include('include-header.php');
 
             paginados.forEach(producto => {
                 const row = document.createElement('tr');
+                const imagen = resolveImageUrl(producto.imagen || '');
+                const imagenCell = imagen ? `<img src="${escapeHtml(imagen)}" alt="img" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid #dce8d9;">` : '<span class="text-muted small">Sin imagen</span>';
                 row.innerHTML = `
 				<td>${producto.id}</td>
 				<td>${producto.codigo || '-'}</td>
+                <td>${imagenCell}</td>
 				<td>${producto.nombre}</td>
 				<td>${producto.categoria_nombre || '-'}</td>
 				<td>${money(producto.precio_base)}</td>
                     <td>${producto.es_combo_gustos ? 'Si' : 'No'}</td>
 				<td>${producto.activo ? 'Activo' : 'Inactivo'}</td>
 				<td class="d-flex gap-1">
-					<button class="btn btn-sm btn-outline-primary" onclick='editProd(${JSON.stringify(producto)})'>Editar</button>
+                    <button class="btn btn-sm btn-outline-primary" onclick='editProd(${JSON.stringify(producto)})'>Editar</button>
 					<button class="btn btn-sm btn-outline-secondary" onclick='abrirOpciones(${JSON.stringify(producto)})'>Opciones</button>
 				</td>
 			`;
@@ -424,14 +553,19 @@ include('include-header.php');
         };
 
         function editProd(producto) {
+            resetProductoForm();
             prodId.value = producto.id;
             prodCodigo.value = producto.codigo || '';
             prodNombre.value = producto.nombre;
             prodCategoria.value = producto.categoria_id || '';
             prodPrecio.value = producto.precio_base;
             prodDesc.value = producto.descripcion || '';
+            prodImagenUrl.value = producto.imagen || '';
             prodActivo.value = producto.activo ? '1' : '0';
             prodComboGustos.checked = !!producto.es_combo_gustos;
+            document.getElementById('tituloModalProducto').textContent = `Editar producto #${producto.id}`;
+            renderImagenPreview(prodImagenUrl.value);
+            modalProducto.show();
         }
 
         window.editProd = editProd;
@@ -573,6 +707,7 @@ include('include-header.php');
                 categoria_id: Number(prodCategoria.value || 0),
                 precio_base: Number(prodPrecio.value || 0),
                 descripcion: prodDesc.value,
+                imagen: (prodImagenUrl.value || '').trim(),
                 activo: Number(prodActivo.value) === 1,
                 es_combo_gustos: !!prodComboGustos.checked
             };
@@ -596,10 +731,36 @@ include('include-header.php');
                 return;
             }
 
-            event.target.reset();
-            prodId.value = '';
-            prodComboGustos.checked = false;
+            const productoId = id || Number(data.id || 0);
+            if (productoId > 0 && prodImagenFile.files?.length) {
+                try {
+                    const nuevaImagen = await uploadImagenProducto(productoId);
+                    if (nuevaImagen) {
+                        prodImagenUrl.value = nuevaImagen;
+                    }
+                } catch (uploadError) {
+                    alert(uploadError.message || 'Producto guardado, pero la imagen no se pudo subir.');
+                }
+            }
+
+            resetProductoForm();
+            modalProducto.hide();
             loadProductos();
+        });
+
+        prodImagenUrl.addEventListener('input', () => {
+            if (prodImagenFile.files?.length) return;
+            renderImagenPreview(prodImagenUrl.value);
+        });
+
+        prodImagenFile.addEventListener('change', () => {
+            const file = prodImagenFile.files?.[0];
+            if (!file) {
+                renderImagenPreview(prodImagenUrl.value);
+                return;
+            }
+            const objectUrl = URL.createObjectURL(file);
+            renderImagenPreview(objectUrl);
         });
 
         filtroProductos.addEventListener('input', () => {
@@ -632,6 +793,9 @@ include('include-header.php');
             resetModForm();
             modalModificador.show();
         });
+
+        document.getElementById('btnNuevoProducto').addEventListener('click', openNuevoProductoModal);
+        document.getElementById('btnNuevoProductoCard').addEventListener('click', openNuevoProductoModal);
 
         formVar.addEventListener('submit', async (e) => {
             e.preventDefault();

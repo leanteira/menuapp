@@ -15,16 +15,16 @@ $pedidoId = isset($_GET['pedido_id']) ? (int) $_GET['pedido_id'] : 0;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --brand: #ea1d6f;
-            --brand-dark: #ca165e;
-            --brand-soft: #ffe2ef;
-            --bg: #f3f2f8;
-            --ink: #241b3e;
-            --line: #e7e4f2;
+            --brand: #2f8a3b;
+            --brand-dark: #246d2f;
+            --brand-soft: #e9f6e8;
+            --bg: #f3f7ee;
+            --ink: #1f2a1f;
+            --line: #dce8d9;
         }
 
         body {
-            background: radial-gradient(circle at top right, #ffe5f2 0, transparent 35%), var(--bg);
+            background: radial-gradient(circle at top right, #e8f5e4 0, transparent 36%), var(--bg);
             color: var(--ink);
             font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
             min-height: 100vh;
@@ -38,7 +38,7 @@ $pedidoId = isset($_GET['pedido_id']) ? (int) $_GET['pedido_id'] : 0;
             background: #fff;
             border: 1px solid var(--line);
             border-radius: 16px;
-            box-shadow: 0 16px 44px rgba(35, 18, 63, .12);
+            box-shadow: 0 16px 44px rgba(39, 79, 39, .14);
             padding: 2rem;
         }
 

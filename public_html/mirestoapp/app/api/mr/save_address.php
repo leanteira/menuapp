@@ -27,6 +27,47 @@ if (!$direccion) {
 $clienteId = (int) $_SESSION['cliente_id'];
 $conn = mr_db();
 
+$direccionLookup = mb_strtolower(trim($direccion), 'UTF-8');
+$referenciaLookup = mb_strtolower(trim($referencia), 'UTF-8');
+
+$sqlExisting = 'SELECT id FROM clientes_direcciones WHERE cliente_id = ? AND LOWER(TRIM(direccion)) = ? AND LOWER(TRIM(COALESCE(referencia, ""))) = ? LIMIT 1';
+$stmtExisting = mysqli_prepare($conn, $sqlExisting);
+if ($stmtExisting) {
+    mysqli_stmt_bind_param($stmtExisting, 'iss', $clienteId, $direccionLookup, $referenciaLookup);
+    mysqli_stmt_execute($stmtExisting);
+    $resExisting = mysqli_stmt_get_result($stmtExisting);
+    $existing = mysqli_fetch_assoc($resExisting);
+    mysqli_stmt_close($stmtExisting);
+
+    if ($existing) {
+        $existingId = (int) $existing['id'];
+
+        if ($is_favorita) {
+            $resetSql = 'UPDATE clientes_direcciones SET is_favorita = 0 WHERE cliente_id = ?';
+            $resetStmt = mysqli_prepare($conn, $resetSql);
+            if ($resetStmt) {
+                mysqli_stmt_bind_param($resetStmt, 'i', $clienteId);
+                mysqli_stmt_execute($resetStmt);
+                mysqli_stmt_close($resetStmt);
+            }
+
+            $favSql = 'UPDATE clientes_direcciones SET is_favorita = 1 WHERE id = ? AND cliente_id = ?';
+            $favStmt = mysqli_prepare($conn, $favSql);
+            if ($favStmt) {
+                mysqli_stmt_bind_param($favStmt, 'ii', $existingId, $clienteId);
+                mysqli_stmt_execute($favStmt);
+                mysqli_stmt_close($favStmt);
+            }
+        }
+
+        mr_json_response([
+            'ok' => true,
+            'direccion_id' => $existingId,
+            'reused' => true,
+        ]);
+    }
+}
+
 $hasFavoriteColumn = true;
 
 // Si es favorita, desmarcar otras como favorita

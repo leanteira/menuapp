@@ -91,10 +91,98 @@ $_SESSION['email'] = $_SESSION['email'] ?? ($currentUser['email'] ?? '');
     <link rel="stylesheet" href="assets/vendor/libs/flatpickr/flatpickr.css?v=<?php echo time(); ?>">
 
     <style>
+        :root {
+            --mr-green-1: #2f8a3b;
+            --mr-green-2: #246d2f;
+            --mr-green-3: #4dae5c;
+            --mr-bg-1: #f3f7ee;
+            --mr-bg-2: #e8f5e4;
+            --mr-line: #dce8d9;
+        }
+
+        body,
+        .content-wrapper {
+            background: linear-gradient(180deg, var(--mr-bg-1) 0%, #f7faf4 52%, var(--mr-bg-2) 100%) !important;
+        }
+
+        .card {
+            border-color: var(--mr-line) !important;
+            box-shadow: 0 8px 20px rgba(39, 79, 39, 0.08) !important;
+        }
+
+        .bg-navbar-theme,
+        #layout-navbar {
+            background: #ffffff !important;
+            border-bottom: 1px solid var(--mr-line) !important;
+            box-shadow: 0 6px 16px rgba(39, 79, 39, 0.06) !important;
+        }
+
+        .btn-primary,
+        .btn.btn-primary {
+            border-color: var(--mr-green-1) !important;
+            background: linear-gradient(135deg, var(--mr-green-1) 0%, #3f9c4c 58%, var(--mr-green-2) 100%) !important;
+            box-shadow: 0 8px 16px rgba(47, 138, 59, 0.2) !important;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn.btn-primary:hover,
+        .btn.btn-primary:focus {
+            border-color: var(--mr-green-2) !important;
+            filter: brightness(1.02);
+        }
+
+        .btn-outline-primary,
+        .btn.btn-outline-primary {
+            color: var(--mr-green-1) !important;
+            border-color: #91c89a !important;
+            background: #f9fdf8 !important;
+        }
+
+        .btn-outline-primary:hover,
+        .btn-outline-primary:focus,
+        .btn.btn-outline-primary:hover,
+        .btn.btn-outline-primary:focus {
+            color: #fff !important;
+            border-color: var(--mr-green-1) !important;
+            background: var(--mr-green-1) !important;
+        }
+
+        .text-primary {
+            color: var(--mr-green-1) !important;
+        }
+
+        .bg-primary {
+            background-color: var(--mr-green-1) !important;
+        }
+
+        .bg-label-primary {
+            background-color: #e7f5e8 !important;
+            color: #2c6f33 !important;
+        }
+
+        .table thead th {
+            background: #ecf5e8 !important;
+            color: #315a31 !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus,
+        textarea.form-control:focus {
+            border-color: #8fc68a !important;
+            box-shadow: 0 0 0 .2rem rgba(47, 138, 59, .18) !important;
+        }
+
+        a,
+        .nav-link,
+        .dropdown-item {
+            --bs-link-color-rgb: 47, 138, 59;
+        }
+
         .layout-menu-fixed .layout-menu,
         .layout-menu-fixed-offcanvas .layout-menu {
-            background: linear-gradient(180deg, #2c4db8 0%, #2243aa 42%, #17358f 100%) !important;
-            border-right: 1px solid #1d3f9f;
+            background: linear-gradient(180deg, #2f8a3b 0%, #2a7f36 42%, #236b2f 100%) !important;
+            border-right: 1px solid #2c6f33;
         }
 
         #layout-menu .app-brand {
@@ -131,8 +219,8 @@ $_SESSION['email'] = $_SESSION['email'] ?? ($currentUser['email'] ?? '');
         #layout-menu .menu-item.active>.menu-link,
         #layout-menu .menu-item.open>.menu-link {
             color: #fff !important;
-            background: linear-gradient(135deg, #7ea3ff 0%, #5f84ff 55%, #4a6df3 100%) !important;
-            box-shadow: 0 10px 22px rgba(8, 24, 71, 0.42);
+            background: linear-gradient(135deg, #66b874 0%, #4ea75c 55%, #3f924d 100%) !important;
+            box-shadow: 0 10px 22px rgba(24, 71, 30, 0.32);
         }
 
         #layout-menu .menu-item.active>.menu-link .menu-icon,

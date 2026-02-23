@@ -15,21 +15,21 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --brand: #ea1d6f;
-            --brand-dark: #ca165e;
-            --brand-soft: #ffe2ef;
-            --bg: #f3f2f8;
-            --ink: #241b3e;
-            --muted: #6f6788;
-            --line: #e7e4f2;
+            --brand: #2f8a3b;
+            --brand-dark: #246d2f;
+            --brand-soft: #e9f6e8;
+            --bg: #f3f7ee;
+            --ink: #1f2a1f;
+            --muted: #5f6f61;
+            --line: #dce8d9;
             --card: #fff;
-            --good: #00a650;
-            --sun: #ffde59;
-            --blue: #2f89ff;
+            --good: #2f8a3b;
+            --sun: #dceea5;
+            --blue: #5da46d;
         }
 
         body {
-            background: radial-gradient(circle at top right, #ffe5f2 0, transparent 35%), var(--bg);
+            background: radial-gradient(circle at top right, #e8f5e4 0, transparent 36%), var(--bg);
             color: var(--ink);
             font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
             padding-right: 340px;
@@ -43,7 +43,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             background: #fff;
             border: 1px solid var(--line);
             border-radius: 14px;
-            box-shadow: 0 8px 24px rgba(35, 18, 63, .06);
+            box-shadow: 0 8px 24px rgba(39, 79, 39, .08);
             padding: .7rem .9rem;
         }
 
@@ -62,7 +62,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             width: 34px;
             height: 34px;
             border-radius: 10px;
-            background: linear-gradient(135deg, var(--brand), #ff539c);
+            background: linear-gradient(135deg, var(--brand), #4dae5c);
             color: #fff;
             display: grid;
             place-items: center;
@@ -80,7 +80,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             border: 1px solid var(--line);
             background: #fff;
             border-radius: 999px;
-            color: #433a61;
+            color: #355239;
             padding: .45rem .75rem;
             font-size: .86rem;
             font-weight: 600;
@@ -100,14 +100,14 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             margin-top: 1rem;
             border-radius: 16px;
             overflow: hidden;
-            background: linear-gradient(100deg, var(--sun) 0 48%, var(--blue) 48% 100%);
+            background: linear-gradient(105deg, #eef6d4 0 48%, #66a876 48% 100%);
             min-height: 188px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
             padding: 1.2rem 1.3rem;
-            box-shadow: 0 14px 32px rgba(15, 17, 45, .15);
+            box-shadow: 0 14px 32px rgba(32, 75, 35, .18);
         }
 
         .hero h1 {
@@ -130,18 +130,18 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             display: grid;
             place-items: center;
             font-size: 3rem;
-            color: #1f2540;
+            color: #234827;
             box-shadow: inset 0 0 0 10px rgba(255, 255, 255, .42);
             flex: 0 0 auto;
         }
 
         .restaurant-head {
             margin-top: 1rem;
-            background: linear-gradient(135deg, var(--brand) 0%, #f167a1 100%);
+            background: linear-gradient(135deg, #2f8a3b 0%, #4ca05a 100%);
             color: #fff;
             border: 0;
             border-radius: 14px;
-            box-shadow: 0 10px 26px rgba(234, 29, 111, .22);
+            box-shadow: 0 10px 26px rgba(47, 138, 59, .24);
         }
 
         .head-meta {
@@ -155,7 +155,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             border-radius: 10px;
             padding: .66rem .8rem;
             background: rgba(255, 255, 255, .96);
-            color: #3b3158;
+            color: #2f4a34;
         }
 
         .category-nav {
@@ -174,7 +174,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             padding: .42rem .86rem;
             font-size: .88rem;
             font-weight: 700;
-            color: #4b4368;
+            color: #39563d;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -302,7 +302,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             font-size: 1.3rem;
             font-weight: 800;
             margin: .15rem 0;
-            color: #261d41;
+            color: #1f3f23;
         }
 
         .floating-cart {
@@ -314,10 +314,10 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
         }
 
         .cart-card {
-            border: 1px solid #d8d5e2;
+            border: 1px solid #d7e5d4;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(25, 18, 52, .08);
+            box-shadow: 0 8px 24px rgba(31, 67, 33, .1);
             height: calc(100vh - 126px);
             max-height: calc(100vh - 126px);
             display: flex;
@@ -330,7 +330,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
         }
 
         .cart-header {
-            background: linear-gradient(90deg, #fff 0, #f8f7fc 100%);
+            background: linear-gradient(90deg, #fff 0, #f4f9f1 100%);
             border-bottom: 1px solid var(--line);
             font-size: 1.05rem;
             font-weight: 800;
@@ -369,11 +369,11 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
         .mr-toast {
             min-width: 240px;
             max-width: 320px;
-            background: #2b2342;
+            background: #1f3f23;
             color: #fff;
             border-radius: 10px;
             padding: .65rem .85rem;
-            box-shadow: 0 10px 24px rgba(25, 18, 52, .22);
+            box-shadow: 0 10px 24px rgba(25, 67, 31, .24);
             border-left: 4px solid #fff;
             opacity: 0;
             transform: translateY(10px);
@@ -493,13 +493,13 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid var(--line);
             background: #fff;
-            box-shadow: 0 2px 8px rgba(36, 27, 62, 0.04);
+            box-shadow: 0 2px 8px rgba(31, 67, 35, 0.06);
         }
 
         .product-card:hover {
             transform: translateY(-6px);
             border-color: var(--brand-soft);
-            box-shadow: 0 12px 28px rgba(234, 29, 111, 0.15);
+            box-shadow: 0 12px 28px rgba(47, 138, 59, 0.18);
         }
 
         /* ========== CARRUSEL Y VISTA GRID ========== */
@@ -625,7 +625,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             top: 50%;
             transform: translateY(-50%);
             z-index: 10;
-            background: rgba(234, 29, 111, 0.9);
+            background: rgba(47, 138, 59, 0.92);
             color: #fff;
             border: none;
             border-radius: 999px;
@@ -914,11 +914,30 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             padding-bottom: 1rem;
         }
 
+        .modal-variants-header-main {
+            min-width: 0;
+        }
+
         .modal-variants-header h5 {
             margin: 0;
             font-size: 1.2rem;
             font-weight: 700;
             color: var(--ink);
+        }
+
+        .modal-variants-image-wrap {
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background: #f7fbf4;
+        }
+
+        .modal-variants-image {
+            width: 100%;
+            max-height: 170px;
+            object-fit: cover;
+            display: block;
         }
 
         .modal-variants-header .btn-close {
@@ -1285,7 +1304,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             if (t.includes('helad')) return 'linear-gradient(130deg,#8ddfff,#5f83ff)';
             if (t.includes('hambur') || t.includes('burger')) return 'linear-gradient(130deg,#f3b86b,#cc6847)';
             if (t.includes('bebida') || t.includes('gaseosa')) return 'linear-gradient(130deg,#65d1c3,#2d8fc5)';
-            return 'linear-gradient(130deg,#8c8be8,#e65ca8)';
+            return 'linear-gradient(130deg,#6eb874,#2f8a3b)';
         }
 
         function hashTextToInt(text) {
@@ -1320,7 +1339,7 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             if (t.includes('bebida') || t.includes('gaseosa') || t.includes('jugo')) return '#65d1c3';
             if (t.includes('postre')) return '#ffb6c1';
             if (t.includes('papas')) return '#ffa500';
-            return '#8c8be8';
+            return '#2f8a3b';
         }
 
         function createSolidFallback(productName, catNombre) {
@@ -1636,9 +1655,23 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
             pendingVariantProductId = productId;
             const modal = document.getElementById('productVariantsModal');
             const title = modal?.querySelector('#variantsModalTitle');
+            const image = modal?.querySelector('#variantsModalImage');
             const body = modal?.querySelector('#variantsModalBody');
 
+            const productCategory = (menuData.categorias || []).find((cat) => (cat.productos || []).some((p) => p.id == productId));
+            const categoryName = productCategory?.nombre || '';
+            const photo = resolveProductPhoto(product, categoryName);
+            const fallbackPhoto = createSolidFallback(product.nombre + ' ' + categoryName, categoryName);
+
             if (title) title.textContent = product.nombre;
+            if (image) {
+                image.src = photo;
+                image.alt = product.nombre;
+                image.onerror = () => {
+                    image.onerror = null;
+                    image.src = fallbackPhoto;
+                };
+            }
             if (body) {
                 body.innerHTML = '';
                 // Variantes (radio buttons)
@@ -2482,8 +2515,13 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
     <div id="productVariantsModal" class="modal-variants">
         <div class="modal-variants-content">
             <div class="modal-variants-header">
-                <h5 id="variantsModalTitle">Selecciona opciones</h5>
+                <div class="modal-variants-header-main">
+                    <h5 id="variantsModalTitle">Selecciona opciones</h5>
+                </div>
                 <button type="button" class="btn-close" id="variantsCloseBtn" aria-label="Close">✕</button>
+            </div>
+            <div class="modal-variants-image-wrap">
+                <img id="variantsModalImage" class="modal-variants-image" src="" alt="Producto">
             </div>
             <div id="variantsModalBody" class="modal-variants-body"></div>
             <div class="modal-variants-footer">
