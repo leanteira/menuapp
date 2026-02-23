@@ -39,6 +39,12 @@ $menu = [
                 'roles' => ['superadmin', 'admin', 'operador'],
             ],
             [
+                'label' => 'Gustos Empanada',
+                'icon'  => 'ri-restaurant-line',
+                'link'  => 'empanada_gustos.php',
+                'roles' => ['superadmin', 'admin', 'operador'],
+            ],
+            [
                 'label' => 'Zonas de Envío',
                 'icon'  => 'ri-map-pin-2-line',
                 'link'  => 'zonas_envio.php',

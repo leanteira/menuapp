@@ -9,6 +9,8 @@ $conn = mr_db();
 $user = mr_user();
 
 $estado = trim((string) mr_request_param('estado', ''));
+$soloHoy = (int) mr_request_param('hoy', 0) === 1;
+$restauranteFiltro = (int) mr_request_param('restaurante_id', 0);
 $limit = (int) mr_request_param('limit', 50);
 $limit = max(1, min(200, $limit));
 
@@ -47,12 +49,20 @@ if ($user['rol'] !== 'superadmin') {
     $sql .= ' AND p.restaurante_id = ?';
     $types .= 'i';
     $params[] = $user['restaurante_id'];
+} elseif ($restauranteFiltro > 0) {
+    $sql .= ' AND p.restaurante_id = ?';
+    $types .= 'i';
+    $params[] = $restauranteFiltro;
 }
 
 if ($estado !== '') {
     $sql .= ' AND p.estado = ?';
     $types .= 's';
     $params[] = $estado;
+}
+
+if ($soloHoy) {
+    $sql .= ' AND DATE(p.created_at) = CURDATE()';
 }
 
 $sql .= ' ORDER BY p.id DESC LIMIT ?';

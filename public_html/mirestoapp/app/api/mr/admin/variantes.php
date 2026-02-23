@@ -97,6 +97,24 @@ if ($method === 'POST') {
         mr_json_response(['ok' => true]);
     }
 
+    if ($action === 'delete') {
+        $id = (int) ($payload['id'] ?? 0);
+        $productoId = (int) ($payload['producto_id'] ?? 0);
+
+        if ($id <= 0 || $productoId <= 0) {
+            mr_json_response(['ok' => false, 'error' => 'Datos inválidos para eliminar.'], 400);
+        }
+
+        mr_validate_producto_scope($conn, $user, $productoId);
+
+        $stmt = mysqli_prepare($conn, 'DELETE FROM producto_variantes WHERE id = ? AND producto_id = ?');
+        mysqli_stmt_bind_param($stmt, 'ii', $id, $productoId);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        mr_json_response(['ok' => true]);
+    }
+
     mr_json_response(['ok' => false, 'error' => 'Acción no soportada.'], 400);
 }
 

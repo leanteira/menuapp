@@ -238,11 +238,6 @@ try {
         }
 
         $costoEnvio = (float) $zona['costo_envio'];
-        $pedidoMinimoZona = (float) $zona['pedido_minimo'];
-        if ($pedidoMinimoZona > 0 && $subtotal < $pedidoMinimoZona) {
-            throw new Exception('No alcanzás el pedido mínimo de la zona seleccionada ($' . number_format($pedidoMinimoZona, 2, '.', '') . ').');
-        }
-
         $zonaId = (int) $zona['id'];
     }
 

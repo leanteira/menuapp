@@ -1,27 +1,27 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <footer class="content-footer footer bg-footer-theme">
-    <div class="container-xxl">
-        <div
-            class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
-            <div class="text-body mb-2 mb-md-0">
-            © <script>
-                document.write(new Date().getFullYear());
-            </script>, Sistema para clínicas
-            </div>
-            <div class="d-none d-lg-inline-block">
-            <a href="#" class="footer-link d-none d-sm-inline-block">Soporte</a>
-            </div>
-        </div>
+  <div class="container-xxl">
+    <div
+      class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
+      <div class="text-body mb-2 mb-md-0">
+        © <script>
+          document.write(new Date().getFullYear());
+        </script>, MiRestoApp
+      </div>
+      <div class="d-none d-lg-inline-block">
+        <a href="#" class="footer-link d-none d-sm-inline-block">Soporte</a>
+      </div>
     </div>
+  </div>
 </footer>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function() {
     // Obtener la URL actual y extraer el nombre del archivo
     const currentPath = window.location.pathname.split("/").pop();
 
-    
+
     // Buscar todos los enlaces del menú
     const menuLinks = document.querySelectorAll(".menu-link");
 

@@ -9,6 +9,13 @@ $conn = mr_db();
 $user = mr_user();
 $payload = mr_get_json_input();
 
+$hasComboGustosColumn = false;
+$resComboCol = mysqli_query($conn, "SHOW COLUMNS FROM productos LIKE 'es_combo_gustos'");
+if ($resComboCol) {
+    $hasComboGustosColumn = mysqli_num_rows($resComboCol) > 0;
+    mysqli_free_result($resComboCol);
+}
+
 $restauranteId = mr_resolve_restaurante_id($user, (int) ($payload['restaurante_id'] ?? 0));
 
 if ($restauranteId <= 0) {
@@ -92,12 +99,15 @@ try {
         $cantidad = (int) ($itemInput['cantidad'] ?? 0);
         $varianteId = (int) ($itemInput['variante_id'] ?? 0);
         $mods = isset($itemInput['modificadores']) && is_array($itemInput['modificadores']) ? $itemInput['modificadores'] : [];
+        $gustos = isset($itemInput['gustos']) && is_array($itemInput['gustos']) ? $itemInput['gustos'] : [];
+        $gustosEmpanada = isset($itemInput['gustos_empanada']) && is_array($itemInput['gustos_empanada']) ? $itemInput['gustos_empanada'] : [];
 
         if ($productoId <= 0 || $cantidad <= 0) {
             throw new Exception('Item inválido.');
         }
 
-        $stmtProd = mysqli_prepare($conn, 'SELECT id, nombre, precio_base, activo FROM productos WHERE id = ? AND restaurante_id = ? LIMIT 1');
+        $extraSelect = $hasComboGustosColumn ? ', es_combo_gustos' : '';
+        $stmtProd = mysqli_prepare($conn, 'SELECT id, nombre, precio_base, activo' . $extraSelect . ' FROM productos WHERE id = ? AND restaurante_id = ? LIMIT 1');
         mysqli_stmt_bind_param($stmtProd, 'ii', $productoId, $restauranteId);
         mysqli_stmt_execute($stmtProd);
         $resProd = mysqli_stmt_get_result($stmtProd);
@@ -107,6 +117,8 @@ try {
         if (!$prod || (int) $prod['activo'] !== 1) {
             throw new Exception('Producto no disponible: ' . $productoId);
         }
+
+        $esComboGustos = $hasComboGustosColumn ? ((int) ($prod['es_combo_gustos'] ?? 0) === 1) : false;
 
         $precioUnitario = (float) $prod['precio_base'];
         $detalles = [];
@@ -150,6 +162,59 @@ try {
             $detalles[] = ['tipo' => 'modificador', 'nombre' => $mod['nombre'], 'precio' => $plus];
         }
 
+        foreach ($gustos as $gustoRaw) {
+            $gustoId = (int) $gustoRaw;
+            if ($gustoId <= 0) {
+                continue;
+            }
+
+            $stmtGusto = mysqli_prepare($conn, 'SELECT nombre FROM helado_gustos WHERE id = ? AND activo = 1 LIMIT 1');
+            mysqli_stmt_bind_param($stmtGusto, 'i', $gustoId);
+            mysqli_stmt_execute($stmtGusto);
+            $resGusto = mysqli_stmt_get_result($stmtGusto);
+            $gusto = mysqli_fetch_assoc($resGusto);
+            mysqli_stmt_close($stmtGusto);
+
+            if ($gusto && !empty($gusto['nombre'])) {
+                $detalles[] = ['tipo' => 'modificador', 'nombre' => 'Gusto: ' . $gusto['nombre'], 'precio' => 0.0];
+            }
+        }
+
+        if ($esComboGustos) {
+            $totalEmpanadas = 0;
+            foreach ($gustosEmpanada as $gustoEmp) {
+                $cantidadEmp = (int) ($gustoEmp['cantidad'] ?? 0);
+                $totalEmpanadas += max(0, $cantidadEmp);
+            }
+
+            if ($totalEmpanadas !== 12) {
+                throw new Exception('La docena de empanadas debe sumar 12 unidades.');
+            }
+
+            foreach ($gustosEmpanada as $gustoEmp) {
+                $gustoId = (int) ($gustoEmp['id'] ?? 0);
+                $cantidadEmp = (int) ($gustoEmp['cantidad'] ?? 0);
+                if ($gustoId <= 0 || $cantidadEmp <= 0) {
+                    continue;
+                }
+
+                $stmtGustoEmp = mysqli_prepare($conn, 'SELECT nombre FROM empanada_gustos WHERE id = ? AND activo = 1 LIMIT 1');
+                mysqli_stmt_bind_param($stmtGustoEmp, 'i', $gustoId);
+                mysqli_stmt_execute($stmtGustoEmp);
+                $resGustoEmp = mysqli_stmt_get_result($stmtGustoEmp);
+                $gustoEmpRow = mysqli_fetch_assoc($resGustoEmp);
+                mysqli_stmt_close($stmtGustoEmp);
+
+                if ($gustoEmpRow && !empty($gustoEmpRow['nombre'])) {
+                    $detalles[] = [
+                        'tipo' => 'gusto_empanada',
+                        'nombre' => 'Empanada: ' . $gustoEmpRow['nombre'] . ' x' . $cantidadEmp,
+                        'precio' => 0.0,
+                    ];
+                }
+            }
+        }
+
         $itemTotal = $precioUnitario * $cantidad;
         $subtotal += $itemTotal;
 
@@ -172,11 +237,6 @@ try {
         }
 
         $costoEnvio = (float) $zona['costo_envio'];
-        $pedidoMinimoZona = (float) $zona['pedido_minimo'];
-        if ($pedidoMinimoZona > 0 && $subtotal < $pedidoMinimoZona) {
-            throw new Exception('No alcanzás el pedido mínimo de la zona seleccionada ($' . number_format($pedidoMinimoZona, 2, '.', '') . ').');
-        }
-
         $zonaId = (int) $zona['id'];
     }
 

@@ -93,18 +93,58 @@ $_SESSION['email'] = $_SESSION['email'] ?? ($currentUser['email'] ?? '');
     <style>
         .layout-menu-fixed .layout-menu,
         .layout-menu-fixed-offcanvas .layout-menu {
-            background: linear-gradient(180deg, #f8f9fb 0%, #f1f3f8 100%);
+            background: linear-gradient(180deg, #2c4db8 0%, #2243aa 42%, #17358f 100%) !important;
+            border-right: 1px solid #1d3f9f;
+        }
+
+        #layout-menu .app-brand {
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.16);
         }
 
         #layout-menu .menu-link,
         #layout-menu .menu-text,
         #layout-menu .menu-icon {
-            color: #344054 !important;
+            color: rgba(242, 247, 255, 0.9) !important;
+        }
+
+        #layout-menu .menu-item>.menu-link {
+            border-radius: 10px;
+            margin: 2px 10px;
+            transition: all .2s ease;
+        }
+
+        #layout-menu .menu-item>.menu-link:hover {
+            background: rgba(255, 255, 255, 0.14) !important;
+            color: #ffffff !important;
+        }
+
+        #layout-menu .menu-sub .menu-link {
+            color: rgba(230, 239, 255, 0.9) !important;
+        }
+
+        #layout-menu .menu-sub .menu-link:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
         }
 
         #layout-menu .menu-item.active>.menu-link,
         #layout-menu .menu-item.open>.menu-link {
             color: #fff !important;
+            background: linear-gradient(135deg, #7ea3ff 0%, #5f84ff 55%, #4a6df3 100%) !important;
+            box-shadow: 0 10px 22px rgba(8, 24, 71, 0.42);
+        }
+
+        #layout-menu .menu-item.active>.menu-link .menu-icon,
+        #layout-menu .menu-item.open>.menu-link .menu-icon {
+            color: #fff !important;
+        }
+
+        #layout-menu .menu-inner>.menu-item.open>.menu-sub {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            margin: 4px 10px 8px;
+            padding: 6px;
         }
     </style>
 </head>

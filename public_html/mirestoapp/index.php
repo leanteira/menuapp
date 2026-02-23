@@ -1654,12 +1654,13 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
                     varGrid.className = 'variant-options-grid';
 
                     product.variantes.forEach(v => {
+                        const variantPrice = parseFloat(v.precio_adicional ?? v.precio ?? 0);
                         const opt = document.createElement('label');
                         opt.className = 'variant-option';
                         opt.innerHTML = `
-                            <input type="radio" name="variant" value="${v.id}" data-variant-name="${v.nombre}" data-variant-price="${v.precio || 0}">
+                            <input type="radio" name="variant" value="${v.id}" data-variant-name="${v.nombre}" data-variant-price="${variantPrice}">
                             <span>${v.nombre}</span>
-                            <span class="variant-price">${money(parseFloat(v.precio || 0))}</span>
+                            <span class="variant-price">${money(variantPrice)}</span>
                         `;
                         varGrid.appendChild(opt);
                     });
@@ -1680,12 +1681,13 @@ $clienteNombre = $_SESSION['paciente_nombre'] ?? 'Mi cuenta';
                     modGrid.className = 'variant-options-grid';
 
                     product.modificadores.forEach(m => {
+                        const modifierPrice = parseFloat(m.precio_adicional ?? m.precio ?? 0);
                         const opt = document.createElement('label');
                         opt.className = 'variant-option';
                         opt.innerHTML = `
-                            <input type="checkbox" name="modifier" value="${m.id}" data-modifier-name="${m.nombre}" data-modifier-price="${m.precio || 0}">
+                            <input type="checkbox" name="modifier" value="${m.id}" data-modifier-name="${m.nombre}" data-modifier-price="${modifierPrice}">
                             <span>${m.nombre}</span>
-                            <span class="variant-price">${money(parseFloat(m.precio || 0))}</span>
+                            <span class="variant-price">${money(modifierPrice)}</span>
                         `;
                         modGrid.appendChild(opt);
                     });
