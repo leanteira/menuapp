@@ -25,3 +25,11 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /public_html/mirestoapp/
         local-dir: ./public_html/mirestoapp/
+        dangerous-clean-slate: false
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          .vscode/**
+        log-level: verbose
+        timeout: 60000
